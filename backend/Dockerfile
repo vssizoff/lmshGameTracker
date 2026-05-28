@@ -8,4 +8,4 @@ RUN bun i
 RUN bun run build
 
 #CMD ["node", "./dist/main.js"]
-CMD ["bun", "./dist/index.js"]
+CMD ["bun", "./dist/main.js"]

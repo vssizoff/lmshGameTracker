@@ -1,3 +1,5 @@
+import Backendium from "backendium";
+
 (async () => {
   const app = new Backendium({
     name: "inf54",

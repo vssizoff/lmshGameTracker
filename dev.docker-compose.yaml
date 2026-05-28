@@ -20,8 +20,6 @@ services:
     build: ./backend
     command: bun ./main.ts
     depends_on:
-      minio:
-        condition: service_healthy
       db:
         condition: service_healthy
     environment:

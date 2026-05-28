@@ -22,8 +22,6 @@ services:
     depends_on:
       minio:
         condition: service_healthy
-      db:
-        condition: service_healthy
     environment:
       PORT: 8080
       HOST: "0.0.0.0"
