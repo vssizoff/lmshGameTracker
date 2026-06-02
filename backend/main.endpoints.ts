@@ -78,7 +78,7 @@ router.post("/free", {
 });
 
 router.post("/score", {}, async (request, response) => {
-    response.end(await db.selectFrom("teams").selectAll().execute());
+    response.end(await db.selectFrom("teams").select(["id", "name", "score"]).where("active", '=', true).orderBy("score", "desc").execute());
 });
 
 export default router;
