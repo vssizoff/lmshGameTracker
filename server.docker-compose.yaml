@@ -20,7 +20,7 @@ services:
     build: ./backend
     command: bun ./main.ts
     depends_on:
-      minio:
+      db:
         condition: service_healthy
     environment:
       PORT: 8080

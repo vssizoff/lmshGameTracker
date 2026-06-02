@@ -4,17 +4,20 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/pg": "^8.20.0"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/redis": "^4.0.11",
     "backendium": "^0.0.21",
     "crypto-random-string": "^5.0.0",
     "kysely": "^0.29.2",
     "parsium": "^0.1.7",
-    "pg": "^8.21.0"
+    "pg": "^8.21.0",
+    "redis": "^6.0.0"
   },
   "scripts": {
     "build": "tsc"

@@ -30,9 +30,12 @@ services:
       DB_USER: postgres
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: postgres
+      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
       NODE_ENV: development
     ports:
-      - "54112:8080"
+      - "54113:8080"
+    volumes:
+      - ./config:/app/config
   nginx:
     build:
       context: .
