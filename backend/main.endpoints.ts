@@ -50,6 +50,25 @@ function diffMinutes(dt1: Date, dt2: Date) {
     return Math.abs((dt2.getTime() - dt1.getTime()) / 60000);
 }
 
+async function free(card: number, end: Date) {
+    let {start} = await db.selectFrom("times")
+        .where(({and, eb}) => and([
+            eb("card", '=', card), eb("end", 'is', null)
+        ]))
+        .select(["start"])
+        .executeTakeFirstOrThrow();
+    let penalty = Math.max(Math.floor(diffMinutes(start, end) - config.freeTime), 0);
+    let data = await db.updateTable("times")
+        .where(({and, eb}) => and([
+            eb("card", '=', card), eb("end", 'is', null)
+        ]))
+        .set({end, penalty})
+        .returningAll()
+        .executeTakeFirstOrThrow();
+    await addScore(data.team, -penalty);
+    return data;
+}
+
 router.post("/free", {
     auth: true,
     bodyValidator: object({card: int()})
@@ -65,16 +84,21 @@ router.post("/free", {
         response.end(`Card ${request.body.card} not in use`);
         return;
     }
-    let data = await db.updateTable("times")
-        .where(({and, eb}) => and([
-            eb("card", '=', request.body.card), eb("end", 'is', null)
-        ]))
-        .set({end: new Date()})
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    await addScore(data.team, -Math.max(Math.floor(diffMinutes(data.start, data.end as Date) - config.freeTime), 0));
-    response.status(200);
-    response.end(data);
+    let end = new Date();
+    response.end(await free(request.body.card, end));
+});
+
+router.post("/free-all", {
+    auth: true
+}, async (request, response) => {
+    let end = new Date();
+    let cards = (await db.selectFrom("times").where("end", "is", null).select("card").execute()).map(({card}) => card);
+    await Promise.all(cards.map(card => free(card, end)));
+    response.end();
+});
+
+router.get("/cards-in-use", {}, async (request, response) => {
+    response.end((await db.selectFrom("times").where("end", "is", null).select("card").execute()).map(({card}) => card));
 });
 
 router.post("/score", {}, async (request, response) => {

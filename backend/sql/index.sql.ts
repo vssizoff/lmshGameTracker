@@ -17,6 +17,7 @@ export interface TimesTable {
     card: number;
     start: ColumnType<Date, Date | string, Date | string>;
     end?: ColumnType<Date, Date | string, Date | string>;
+    penalty?: number;
 }
 
 export interface Database {

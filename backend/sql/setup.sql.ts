@@ -16,6 +16,7 @@ export default async function () {
             .addColumn("pointsToCatcher", "integer", cb => cb.notNull())
             .addColumn("card", "integer")
             .addColumn("start", "timestamp", cb => cb.notNull())
-            .addColumn("end", "timestamp").execute();
+            .addColumn("end", "timestamp")
+            .addColumn("penalty", "integer").execute();
     } catch (error) {}
 }
