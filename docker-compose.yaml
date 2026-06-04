@@ -31,6 +31,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: postgres
       NODE_ENV: development
+    volumes:
+      - ./config:/app/config
   nginx:
     build:
       context: .
