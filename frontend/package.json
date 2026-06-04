@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.5.4",
+    "@vueuse/core": "^14.3.0",
     "primevue": "^4.5.5",
     "radix-vue": "^1.9.17",
     "superagent": "^10.3.0",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.12.2",
+    "@types/superagent": "^8.1.10",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
     "npm-run-all2": "^8.0.4",

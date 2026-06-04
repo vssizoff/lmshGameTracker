@@ -101,7 +101,7 @@ router.get("/cards-in-use", {}, async (request, response) => {
     response.end((await db.selectFrom("times").where("end", "is", null).select("card").execute()).map(({card}) => card));
 });
 
-router.post("/score", {}, async (request, response) => {
+router.get("/score", {}, async (request, response) => {
     response.end(await db.selectFrom("teams").select(["id", "name", "score"]).where("active", '=', true).orderBy("score", "desc").execute());
 });
 
