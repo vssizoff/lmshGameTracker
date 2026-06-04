@@ -4,6 +4,7 @@ import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@
 import {Button, InputNumber, Select, useToast} from "primevue";
 
 const accepted = ref(false);
+
 const teams = ref<Array<ScoreType>>([]);
 const catchersTeam = ref<ScoreType>();
 const team = ref<ScoreType>();

@@ -34,3 +34,7 @@ export async function catch_(catchersTeam: string, team: string, pointsToCatcher
 export async function getCardsInUse(): Promise<Array<number>> {
     return JSON.parse((await superagent.get("/api/cards-in-use")).text);
 }
+
+export async function free(card: number) {
+    await superagent.post("/api/free").send({card}).set({authorization: password.value});
+}

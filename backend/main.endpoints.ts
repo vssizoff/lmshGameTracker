@@ -98,7 +98,7 @@ router.post("/free-all", {
 });
 
 router.get("/cards-in-use", {}, async (request, response) => {
-    response.end((await db.selectFrom("times").where("end", "is", null).select("card").execute()).map(({card}) => card));
+    response.end((await db.selectFrom("times").where("end", "is", null).select("card").orderBy("card", "asc").execute()).map(({card}) => card));
 });
 
 router.get("/score", {}, async (request, response) => {

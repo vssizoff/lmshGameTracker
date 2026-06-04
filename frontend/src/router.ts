@@ -12,6 +12,11 @@ const router = createRouter({
       path: "/catch",
       name: "catch",
       component: () => import("./views/catch/CatchView.vue")
+    },
+    {
+      path: "/free",
+      name: "free",
+      component: () => import("./views/free/FreeView.vue")
     }
   ]
 });
