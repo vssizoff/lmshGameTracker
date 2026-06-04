@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@/api.js";
-import {Button, InputNumber, Select} from "primevue";
+import {Button, InputNumber, Select, useToast} from "primevue";
 
 const accepted = ref(false);
 const teams = ref<Array<ScoreType>>([]);
@@ -21,6 +21,17 @@ onMounted(async () => {
 async function checkCard(value: number) {
   invalidCard.value = Boolean(value && (await getCardsInUse()).includes(value));
 }
+
+const toast = useToast();
+
+async function submit() {
+  await catch_(catchersTeam.value?.id ?? '', team.value?.id ?? '', pointsToCatcher.value ?? 0, card.value ?? 0);
+  catchersTeam.value = undefined;
+  team.value = undefined;
+  pointsToCatcher.value = undefined;
+  card.value = undefined;
+  toast.add({summary: "Done", severity: "success"});
+}
 </script>
 
 <template>
@@ -36,7 +47,7 @@ async function checkCard(value: number) {
     />
     <span v-if="invalidCard">Карточка используется</span>
     <Button
-        @click="catch_(catchersTeam?.id ?? '', team?.id ?? '', pointsToCatcher ?? 0, card ?? 0)"
+        @click="submit"
         :disabled="invalidCard || !catchersTeam || !card || !pointsToCatcher || !card"
     >
       Отправить
