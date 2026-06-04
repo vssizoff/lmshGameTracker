@@ -2,17 +2,35 @@
 import {onMounted, ref} from "vue";
 import {getScore, type ScoreType} from "@/api.js";
 
-const scores = ref<Array<ScoreType>>([])
+const scores = ref<Array<ScoreType & {place: number}>>([])
 
 onMounted(async () => {
-  scores.value = await getScore();
+  let place = 1;
+  scores.value = (await getScore()).map((score, index, array) => {
+    if (index !== 0 && array[index - 1]?.score !== score.score) place++;
+    return {
+      ...score,
+      place
+    };
+  });
 });
 </script>
 
 <template>
   <main>
-    <div v-for="{name, score} in scores" class="scores">
-      <span class="name">{{name}}</span>
+    <div
+        v-for="{name, score, place} in scores"
+        class="scores"
+        :class="{
+          first: place === 1,
+          second: place === 2,
+          third: place === 3
+        }"
+    >
+      <div>
+        <span class="place">{{place}}</span>
+        <span class="name">{{name}}</span>
+      </div>
       <span class="score">{{score}}</span>
     </div>
   </main>
@@ -35,20 +53,28 @@ main {
   padding: 15px;
   border-radius: 20px;
 
-  &:first-child {
-    background: #00f637;
-    color: black;
+  .place {
+    background: black;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 10px;
   }
+}
 
-  &:nth-child(2) {
-    background: #00bc2b;
-    color: black;
-  }
+.first {
+  background: #00f637;
+  color: black;
+}
 
-  &:nth-child(3) {
-    background: #008720;
-    color: black;
-  }
+.second {
+  background: #00bc2b;
+  color: black;
+}
+
+.third {
+  background: #008720;
+  color: black;
 }
 </style>
 
