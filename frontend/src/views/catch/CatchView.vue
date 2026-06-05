@@ -37,8 +37,8 @@ async function submit() {
 
 <template>
   <main v-if="accepted">
-    <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего"/>
-    <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного"/>
+    <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
+    <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
     <InputNumber v-model="pointsToCatcher" placeholder="Баллы"/>
     <InputNumber
         v-model="card"
