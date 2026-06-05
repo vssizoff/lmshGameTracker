@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@/api.js";
 import {Button, InputNumber, Select, useToast} from "primevue";
+import HeaderComponent from "@/components/HeaderComponent.vue";
 
 const accepted = ref(false);
 
@@ -37,6 +38,7 @@ async function submit() {
 
 <template>
   <main v-if="accepted">
+    <HeaderComponent/>
     <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
     <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
     <InputNumber v-model="pointsToCatcher" placeholder="Баллы"/>

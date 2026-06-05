@@ -33,6 +33,7 @@ onMounted(async () => {
       </div>
       <span class="score">{{score}}</span>
     </div>
+    <RouterLink to="/catch">Вход для организатора</RouterLink>
   </main>
 </template>
 

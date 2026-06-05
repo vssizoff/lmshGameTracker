@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {free, getCardsInUse, promptPassword} from "@/api.ts";
 import {Button, useToast} from "primevue";
+import HeaderComponent from "@/components/HeaderComponent.vue";
 
 const accepted = ref(false);
 
@@ -27,14 +28,18 @@ async function submit(card: number) {
 </script>
 
 <template>
-  <main v-if="accepted">
-    <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>
-  </main>
+  <div v-if="accepted">
+    <HeaderComponent/>
+    <main>
+      <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>
+    </main>
+  </div>
   <div v-else>Password in incorrect</div>
 </template>
 
 <style scoped>
 main {
+  margin-top: 10px;
   max-width: 600px;
   width: 100%;
 
