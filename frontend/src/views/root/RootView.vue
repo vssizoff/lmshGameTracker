@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue";
 import {getScore, type ScoreType} from "@/api.js";
 
 const scores = ref<Array<ScoreType & {place: number}>>([])
+const navShowed = ref(true);
 
 onMounted(async () => {
   let place = 1;
@@ -33,7 +34,7 @@ onMounted(async () => {
       </div>
       <span class="score">{{score}}</span>
     </div>
-    <RouterLink to="/catch">Вход для организатора</RouterLink>
+    <nav v-if="navShowed">[ <RouterLink to="/catch">Вход для организатора</RouterLink> | <span @click="navShowed = false" class="hide">скрыть</span> ]</nav>
   </main>
 </template>
 
@@ -76,6 +77,11 @@ main {
 .third {
   background: #008720;
   color: black;
+}
+
+.hide {
+  color: cornflowerblue;
+  cursor: pointer;
 }
 </style>
 

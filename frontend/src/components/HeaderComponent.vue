@@ -5,8 +5,10 @@
 <template>
   <header>
     <span>Перейти:</span>
+    <RouterLink to="/">Счёт</RouterLink>
     <RouterLink to="/catch">Поймать</RouterLink>
     <RouterLink to="/free">Освободить</RouterLink>
+    <RouterLink to="/settings">Настройки</RouterLink>
   </header>
 </template>
 
