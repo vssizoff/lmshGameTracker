@@ -1,16 +1,38 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {getAllTeams, promptPassword, type TeamType, updateTeams} from "@/api.ts";
+import {
+  type ConfigType,
+  freeAll,
+  getAllTeams,
+  getConfig, password,
+  promptPassword,
+  type TeamType,
+  updateConfig,
+  updateTeams
+} from "@/api.ts";
 import HeaderComponent from "@/components/HeaderComponent.vue";
-import {DataTable, Column, InputText, ToggleSwitch, Button} from "primevue";
+import {
+  DataTable,
+  Column,
+  InputText,
+  ToggleSwitch,
+  Button,
+  InputNumber,
+  ConfirmDialog,
+  useConfirm,
+  useToast
+} from "primevue";
+
+const accepted = ref(false);
 
 const teams = ref<Array<TeamType>>([]);
-const accepted = ref(false);
+const config = ref<ConfigType>({password: "", freeTime: 0});
 
 onMounted(async () => {
   await promptPassword();
   accepted.value = true;
   teams.value = await getAllTeams();
+  config.value = await getConfig();
 });
 
 function add() {
@@ -20,7 +42,34 @@ function add() {
     id,
     name: "",
     active: true
-  })
+  });
+}
+
+async function update() {
+  await updateConfig(config.value);
+  password.value = config.value.password;
+  await promptPassword();
+}
+
+const confirm = useConfirm();
+const toast = useToast();
+
+async function freeAll_() {
+  confirm.require({
+    header: "Освободить всех?",
+    rejectProps: {
+      label: "Отмена",
+      severity: "secondary",
+      outlined: true
+    },
+    acceptProps: {
+      label: "Освободить"
+    },
+    accept: async () => {
+      await freeAll();
+      toast.add({severity: "success", summary: "Done"});
+    }
+  });
 }
 </script>
 
@@ -48,7 +97,17 @@ function add() {
         </div>
       </div>
       <div class="settings">
-
+        <label>
+          <span>Пароль:</span>
+          <InputText class="input" v-model="config.password"/>
+        </label>
+        <label>
+          <span>Время без штрафа:</span>
+          <InputNumber class="input" v-model="config.freeTime"/>
+        </label>
+        <Button @click="update">Save</Button>
+        <Button @click="freeAll_" severity="warn">Освободить всех</Button>
+        <ConfirmDialog/>
       </div>
     </main>
   </div>
@@ -58,10 +117,12 @@ function add() {
 <style scoped>
 main {
   display: flex;
-}
+  gap: 20px;
+  margin-top: 20px;
 
-.teams, .settings {
-  flex-basis: 50%;
+  @media (width < 1105px) {
+    flex-direction: column;
+  }
 }
 
 .teams {
@@ -69,7 +130,7 @@ main {
   flex-direction: column;
   align-items: flex-end;
   gap: 20px;
-  margin-top: 20px;
+  flex-basis: 70%;
 
   .table {
     width: 100%;
@@ -78,6 +139,23 @@ main {
   .buttons {
     display: flex;
     gap: 20px;
+  }
+}
+
+.settings {
+  flex-basis: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .input {
+      width: 100%;
+    }
   }
 }
 </style>

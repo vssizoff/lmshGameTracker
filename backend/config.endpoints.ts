@@ -58,4 +58,10 @@ router.post("/", {
     response.end(config);
 });
 
+router.get("/", {
+    auth: true
+}, async (request, response) => {
+    response.end(config);
+})
+
 export default router;

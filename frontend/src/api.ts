@@ -15,6 +15,11 @@ export type TeamType = {
     active: boolean
 }
 
+export type ConfigType = {
+    password: string,
+    freeTime: number
+}
+
 export async function getScore(): Promise<Array<ScoreType>> {
     return JSON.parse((await superagent.get("/api/score")).text);
 }
@@ -51,4 +56,16 @@ export async function getAllTeams(): Promise<Array<TeamType>> {
 
 export async function updateTeams(teams: Array<TeamType>) {
     await superagent.post("/api/config/teams").send(teams).set({authorization: password.value});
+}
+
+export async function getConfig(): Promise<ConfigType> {
+    return JSON.parse((await superagent.get("/api/config").set({authorization: password.value})).text);
+}
+
+export async function updateConfig(config: ConfigType) {
+    await superagent.post("/api/config").send(config).set({authorization: password.value});
+}
+
+export async function freeAll() {
+    await superagent.post("/api/free-all").set({authorization: password.value});
 }
