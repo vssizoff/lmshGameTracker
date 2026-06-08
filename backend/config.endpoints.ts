@@ -46,6 +46,10 @@ router.post("/teams", {
     response.end(await db.selectFrom("teams").selectAll().execute());
 });
 
+router.get("/teams", {}, async (request, response) => {
+    response.end(await db.selectFrom("teams").select(["id", "name", "active"]).execute());
+});
+
 router.post("/", {
     bodyValidator: configValidator,
     auth: true

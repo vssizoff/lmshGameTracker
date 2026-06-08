@@ -9,6 +9,12 @@ export type ScoreType = {
     score: number
 };
 
+export type TeamType = {
+    id: string,
+    name: string,
+    active: boolean
+}
+
 export async function getScore(): Promise<Array<ScoreType>> {
     return JSON.parse((await superagent.get("/api/score")).text);
 }
@@ -37,4 +43,12 @@ export async function getCardsInUse(): Promise<Array<number>> {
 
 export async function free(card: number) {
     await superagent.post("/api/free").send({card}).set({authorization: password.value});
+}
+
+export async function getAllTeams(): Promise<Array<TeamType>> {
+    return JSON.parse((await superagent.get("/api/config/teams")).text);
+}
+
+export async function updateTeams(teams: Array<TeamType>) {
+    await superagent.post("/api/config/teams").send(teams).set({authorization: password.value});
 }
