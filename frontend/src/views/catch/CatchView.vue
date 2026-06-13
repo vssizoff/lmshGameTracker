@@ -19,7 +19,7 @@ const invalidCard = ref<boolean>(false);
 onMounted(async () => {
   await promptPassword();
   accepted.value = true;
-  teams.value = await getScore();
+  teams.value = (await getScore()).sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
   pending.value = false;
 });
 
