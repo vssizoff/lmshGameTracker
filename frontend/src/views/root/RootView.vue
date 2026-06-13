@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {getScore, type ScoreType} from "@/api.js";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
+
+const pending = ref(true);
 
 const scores = ref<Array<ScoreType & {place: number}>>([])
 const navShowed = ref(true);
@@ -14,11 +17,13 @@ onMounted(async () => {
       place
     };
   });
+  pending.value = false;
 });
 </script>
 
 <template>
-  <main>
+  <ProgressIndicator v-if="pending"/>
+  <main v-else>
     <div
         v-for="{name, score, place} in scores"
         class="scores"

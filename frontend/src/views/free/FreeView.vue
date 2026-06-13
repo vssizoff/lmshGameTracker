@@ -3,8 +3,10 @@ import {onMounted, ref} from "vue";
 import {free, getCardsInUse, promptPassword} from "@/api.ts";
 import {Button, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
 
 const accepted = ref(false);
+const pending = ref(true);
 
 const cards = ref<Array<number>>([]);
 
@@ -17,6 +19,7 @@ onMounted(async () => {
   await promptPassword();
   accepted.value = true;
   await updateCards();
+  pending.value = false;
 });
 
 const toast = useToast();
@@ -28,7 +31,8 @@ async function submit(card: number) {
 </script>
 
 <template>
-  <div v-if="accepted">
+  <ProgressIndicator v-if="pending"/>
+  <div v-else-if="accepted">
     <HeaderComponent/>
     <main>
       <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>

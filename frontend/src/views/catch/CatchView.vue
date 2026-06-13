@@ -3,8 +3,10 @@ import {onMounted, ref} from "vue";
 import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@/api.js";
 import {Button, InputNumber, Select, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
 
 const accepted = ref(false);
+const pending = ref(true);
 
 const teams = ref<Array<ScoreType>>([]);
 const catchersTeam = ref<ScoreType>();
@@ -18,6 +20,7 @@ onMounted(async () => {
   await promptPassword();
   accepted.value = true;
   teams.value = await getScore();
+  pending.value = false;
 });
 
 async function checkCard(value: number) {
@@ -37,7 +40,8 @@ async function submit() {
 </script>
 
 <template>
-  <main v-if="accepted">
+  <ProgressIndicator v-if="pending"/>
+  <main v-else-if="accepted">
     <HeaderComponent/>
     <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
     <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>

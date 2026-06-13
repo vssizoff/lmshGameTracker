@@ -22,8 +22,10 @@ import {
   useConfirm,
   useToast
 } from "primevue";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
 
 const accepted = ref(false);
+const pending = ref(true);
 
 const teams = ref<Array<TeamType>>([]);
 const config = ref<ConfigType>({password: "", freeTime: 0});
@@ -33,6 +35,7 @@ onMounted(async () => {
   accepted.value = true;
   teams.value = await getAllTeams();
   config.value = await getConfig();
+  pending.value = false;
 });
 
 function add() {
@@ -74,7 +77,8 @@ async function freeAll_() {
 </script>
 
 <template>
-  <div v-if="accepted">
+  <ProgressIndicator v-if="pending"/>
+  <div v-else-if="accepted">
     <HeaderComponent/>
     <main>
       <div class="teams">
