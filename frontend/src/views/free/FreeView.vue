@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {free, getCardsInUse, promptPassword} from "@/api.ts";
 import {Button, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
@@ -9,10 +9,11 @@ const accepted = ref(false);
 const pending = ref(true);
 
 const cards = ref<Array<number>>([]);
+const timeout = ref<NodeJS.Timeout>();
 
 async function updateCards() {
   cards.value = await getCardsInUse();
-  setTimeout(updateCards, 1000);
+  timeout.value = setTimeout(updateCards, 1000);
 }
 
 onMounted(async () => {
@@ -20,6 +21,10 @@ onMounted(async () => {
   accepted.value = true;
   await updateCards();
   pending.value = false;
+});
+
+onUnmounted(() => {
+  clearTimeout(timeout.value);
 });
 
 const toast = useToast();
