@@ -22,28 +22,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ProgressIndicator v-if="pending"/>
-  <main v-else>
-    <div
-        v-for="{name, score, place} in scores"
-        class="scores"
-        :class="{
-          first: place === 1,
-          second: place === 2,
-          third: place === 3
-        }"
-    >
-      <div>
-        <span class="place">{{place}}</span>
-        <span class="name">{{name}}</span>
+  <div class="wrapper">
+    <ProgressIndicator v-if="pending"/>
+    <main v-else>
+      <div
+          v-for="{name, score, place} in scores"
+          class="scores"
+          :class="{
+            first: place === 1,
+            second: place === 2,
+            third: place === 3
+          }"
+      >
+        <div>
+          <span class="place">{{place}}</span>
+          <span class="name">{{name}}</span>
+        </div>
+        <span class="score">{{score}}</span>
       </div>
-      <span class="score">{{score}}</span>
-    </div>
-    <nav v-if="navShowed">[ <RouterLink to="/catch">Вход для организатора</RouterLink> | <span @click="navShowed = false" class="hide">скрыть</span> ]</nav>
-  </main>
+      <nav v-if="navShowed">[ <RouterLink to="/catch">Вход для организатора</RouterLink> | <span @click="navShowed = false" class="hide">скрыть</span> ]</nav>
+    </main>
+  </div>
 </template>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 main {
   max-width: 600px;
   width: 100%;
@@ -87,12 +95,5 @@ main {
 .hide {
   color: cornflowerblue;
   cursor: pointer;
-}
-</style>
-
-<style>
-#app {
-  display: flex;
-  justify-content: center;
 }
 </style>

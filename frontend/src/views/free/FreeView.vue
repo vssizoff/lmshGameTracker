@@ -31,17 +31,25 @@ async function submit(card: number) {
 </script>
 
 <template>
+  <div class="wrapper">
   <ProgressIndicator v-if="pending"/>
-  <div v-else-if="accepted">
-    <HeaderComponent/>
-    <main>
-      <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>
-    </main>
+    <div v-else-if="accepted">
+      <HeaderComponent/>
+      <main>
+        <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>
+      </main>
+    </div>
+    <div v-else>Password in incorrect</div>
   </div>
-  <div v-else>Password in incorrect</div>
 </template>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 main {
   margin-top: 10px;
   max-width: 600px;
@@ -50,12 +58,5 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-}
-</style>
-
-<style>
-#app {
-  display: flex;
-  justify-content: center;
 }
 </style>

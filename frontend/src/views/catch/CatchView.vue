@@ -40,42 +40,43 @@ async function submit() {
 </script>
 
 <template>
-  <ProgressIndicator v-if="pending"/>
-  <main v-else-if="accepted">
-    <HeaderComponent/>
-    <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
-    <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
-    <InputNumber v-model="pointsToCatcher" placeholder="Баллы"/>
-    <InputNumber
-        v-model="card"
-        placeholder="Карточка"
-        :invalid="invalidCard"
-        @input="event => checkCard(Number(event.value))"
-    />
-    <span v-if="invalidCard">Карточка используется</span>
-    <Button
-        @click="submit"
-        :disabled="invalidCard || !catchersTeam || !card || !pointsToCatcher || !card"
-    >
-      Отправить
-    </Button>
-  </main>
-  <div v-else>Password in incorrect</div>
+  <div class="wrapper">
+    <ProgressIndicator v-if="pending"/>
+    <main v-else-if="accepted">
+      <HeaderComponent/>
+      <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
+      <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
+      <InputNumber v-model="pointsToCatcher" placeholder="Баллы"/>
+      <InputNumber
+          v-model="card"
+          placeholder="Карточка"
+          :invalid="invalidCard"
+          @input="event => checkCard(Number(event.value))"
+      />
+      <span v-if="invalidCard">Карточка используется</span>
+      <Button
+          @click="submit"
+          :disabled="invalidCard || !catchersTeam || !card || !pointsToCatcher || !card"
+      >
+        Отправить
+      </Button>
+    </main>
+    <div v-else>Password in incorrect</div>
+  </div>
 </template>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 main {
   display: flex;
   flex-direction: column;
   gap: 10px;
   max-width: 600px;
   width: 100%;
-}
-</style>
-
-<style>
-#app {
-  display: flex;
-  justify-content: center;
 }
 </style>
