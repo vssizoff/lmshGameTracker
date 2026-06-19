@@ -46,6 +46,10 @@ export async function getCardsInUse(): Promise<Array<number>> {
     return JSON.parse((await superagent.get("/api/cards-in-use")).text);
 }
 
+export async function getFree(card: number): Promise<number> {
+    return Number((await superagent.get(`/api/free?card=${card}`).set({authorization: password.value})).text);
+}
+
 export async function free(card: number) {
     await superagent.post("/api/free").send({card}).set({authorization: password.value});
 }

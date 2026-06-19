@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from "vue";
-import {free, getCardsInUse, promptPassword} from "@/api.ts";
-import {Button, useToast} from "primevue";
+import {free, getCardsInUse, getFree, promptPassword} from "@/api.ts";
+import {Button, ConfirmDialog, useConfirm, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import ProgressIndicator from "@/components/ProgressIndicator.vue";
 
@@ -27,11 +27,27 @@ onUnmounted(() => {
   clearTimeout(timeout.value);
 });
 
+const confirm = useConfirm();
 const toast = useToast();
 
 async function submit(card: number) {
-  await free(card);
-  toast.add({summary: "Done", severity: "success"});
+  let time = await getFree(card);
+  confirm.require({
+    header: `Освободить ${card}?`,
+    message: `Время в плену ${time}`,
+    rejectProps: {
+      label: "Отмена",
+      severity: "secondary",
+      outlined: true
+    },
+    acceptProps: {
+      label: "Освободить"
+    },
+    accept: async () => {
+      await free(card);
+      toast.add({summary: "Done", severity: "success"});
+    }
+  });
 }
 </script>
 
@@ -43,6 +59,7 @@ async function submit(card: number) {
       <main>
         <Button v-for="card in cards" @click="submit(card)">{{card}}</Button>
       </main>
+      <ConfirmDialog/>
     </div>
     <div v-else>Password in incorrect</div>
   </div>

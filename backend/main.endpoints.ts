@@ -69,6 +69,19 @@ async function free(card: number, end: Date) {
     return data;
 }
 
+router.get("/free", {
+    auth: true,
+    queryValidator: object({card: int()})
+}, async (request, response) => {
+    let {start} = await db.selectFrom("times")
+        .where(({and, eb}) => and([
+            eb("card", '=', request.query.card), eb("end", 'is', null)
+        ]))
+        .select(["start"])
+        .executeTakeFirstOrThrow();
+    response.end(diffMinutes(start, new Date()));
+});
+
 router.post("/free", {
     auth: true,
     bodyValidator: object({card: int()})
