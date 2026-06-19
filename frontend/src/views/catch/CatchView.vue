@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@/api.js";
 import {Button, InputNumber, Select, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
@@ -11,8 +11,14 @@ const pending = ref(true);
 const teams = ref<Array<ScoreType>>([]);
 const catchersTeam = ref<ScoreType>();
 const team = ref<ScoreType>();
-const pointsToCatcher = ref<number>();
 const card = ref<number>();
+
+const count1 = ref<number>();
+const count2 = ref<number>();
+
+const pointsToCatcher = computed(() => {
+  return count2.value;
+});
 
 const invalidCard = ref<boolean>(false);
 
@@ -33,7 +39,6 @@ async function submit() {
   await catch_(catchersTeam.value?.id ?? '', team.value?.id ?? '', pointsToCatcher.value ?? 0, card.value ?? 0);
   catchersTeam.value = undefined;
   team.value = undefined;
-  pointsToCatcher.value = undefined;
   card.value = undefined;
   toast.add({summary: "Done", severity: "success"});
 }
@@ -46,7 +51,22 @@ async function submit() {
       <HeaderComponent/>
       <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
       <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
-      <InputNumber :modelValue="pointsToCatcher" @input="pointsToCatcher = $event.value ? Number($event.value) : undefined" placeholder="Баллы"/>
+      <div class="pointInputs">
+        <InputNumber
+            :modelValue="count1"
+            @input="count1 = $event.value ? Number($event.value) : undefined"
+            placeholder="Резинки поймавшего"
+        />
+        <InputNumber
+            :modelValue="count2"
+            @input="count2 = $event.value ? Number($event.value) : undefined"
+            placeholder="Резинки пойманного"
+        />
+      </div>
+      <span>Забрать у поймавшего: {{(count2 ?? 0) + 1}} | Итого: {{(count1 ?? 0) - (count2 ?? 0) - 1}}</span>
+      <span>Отдать пойманому: {{Math.ceil((count2 ?? 0) / 2)}} | Итого: {{(count2 ?? 0) + Math.ceil((count2 ?? 0) / 2)}}</span>
+      <span>Забрать организатору: {{Math.floor((count2 ?? 0) / 2)}}</span>
+      <span>Баллы: {{pointsToCatcher}}</span>
       <InputNumber
           :modelValue="card"
           @input="card = $event.value ? Number($event.value) : undefined"
@@ -78,5 +98,15 @@ main {
   gap: 10px;
   max-width: 600px;
   width: 100%;
+}
+
+.pointInputs {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+
+  & > * {
+    width: 100%;
+  }
 }
 </style>
