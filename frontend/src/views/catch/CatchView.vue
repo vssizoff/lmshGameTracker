@@ -65,7 +65,7 @@ async function submit() {
       </div>
       <span>Забрать у поймавшего: {{(count2 ?? 0) + 1}} | Итого: {{(count1 ?? 0) - (count2 ?? 0) - 1}}</span>
       <span>Отдать пойманому: {{Math.ceil((count2 ?? 0) / 2)}} | Итого: {{(count2 ?? 0) + Math.ceil((count2 ?? 0) / 2)}}</span>
-      <span>Забрать организатору: {{Math.floor((count2 ?? 0) / 2)}}</span>
+      <span>Забрать организатору: {{(count2 ?? 0) + 1 - Math.ceil((count2 ?? 0) / 2)}}</span>
       <span>Баллы: {{pointsToCatcher}}</span>
       <InputNumber
           :modelValue="card"
