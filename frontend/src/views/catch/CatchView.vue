@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {catch_, getCardsInUse, getScore, promptPassword, type ScoreType} from "@/api.js";
 import {Button, InputNumber, Select, useToast} from "primevue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
@@ -23,9 +23,9 @@ onMounted(async () => {
   pending.value = false;
 });
 
-async function checkCard(value: number) {
+watch(card, async value => {
   invalidCard.value = Boolean(value && (await getCardsInUse()).includes(value));
-}
+});
 
 const toast = useToast();
 
@@ -46,12 +46,12 @@ async function submit() {
       <HeaderComponent/>
       <Select :options="teams" v-model="catchersTeam" optionLabel="name" placeholder="Отряд поймавшего" filter/>
       <Select :options="teams" v-model="team" optionLabel="name" placeholder="Отряд пойманного" filter/>
-      <InputNumber v-model="pointsToCatcher" placeholder="Баллы"/>
+      <InputNumber :modelValue="pointsToCatcher" @input="pointsToCatcher = $event.value ? Number($event.value) : undefined" placeholder="Баллы"/>
       <InputNumber
-          v-model="card"
+          :modelValue="card"
+          @input="card = $event.value ? Number($event.value) : undefined"
           placeholder="Карточка"
           :invalid="invalidCard"
-          @input="event => checkCard(Number(event.value))"
       />
       <span v-if="invalidCard">Карточка используется</span>
       <Button

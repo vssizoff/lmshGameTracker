@@ -103,11 +103,11 @@ async function freeAll_() {
       <div class="settings">
         <label>
           <span>Пароль:</span>
-          <InputText class="input" v-model="config.password"/>
+          <InputText class="input" :modelValue="config.password" @input="config.password = ($event.target as HTMLInputElement).value"/>
         </label>
         <label>
           <span>Время без штрафа:</span>
-          <InputNumber class="input" v-model="config.freeTime"/>
+          <InputNumber class="input" v-model="config.freeTime" @input="config.freeTime = $event.value ? Number($event.value) : 0"/>
         </label>
         <Button @click="update">Save</Button>
         <Button @click="freeAll_" severity="warn">Освободить всех</Button>
